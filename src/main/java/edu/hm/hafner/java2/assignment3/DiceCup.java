@@ -117,7 +117,7 @@ public class DiceCup implements Iterable<Die> {
         private final Die[] dice;
         private int index;
 
-        DiceCupIterator(final Die[] dice) {
+        DiceCupIterator(final Die... dice) {
             this.dice = Arrays.copyOf(dice, dice.length);
             index = 0;
         }
