@@ -5,14 +5,18 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
 /**
- * Tests the class {@link LargeStraight}.
+ * Tests the class LargeStraight.
  *
  * @author Ullrich Hafner
  */
-class LargeStraightTest extends AbstractYahtzeeTest {
+class LargeStraightTest {
+    private YahtzeeEvaluator createYahtzeeEvaluator() {
+        return null; // FIXME: create new instance
+    }
+
     @Test
     void shouldFindLargeStraight() {
-        LargeStraight counter = new LargeStraight();
+        YahtzeeEvaluator counter = createYahtzeeEvaluator();
 
         assertThat(counter.computeScore(1, 2, 3, 4, 5)).isEqualTo(40);
         assertThat(counter.computeScore(2, 3, 4, 5, 6)).isEqualTo(40);
@@ -25,16 +29,11 @@ class LargeStraightTest extends AbstractYahtzeeTest {
 
     @Test
     void shouldRejectAsLargeStraight() {
-        LargeStraight counter = new LargeStraight();
+        YahtzeeEvaluator counter = createYahtzeeEvaluator();
 
         assertThat(counter.computeScore(5, 5, 4, 4, 6)).isEqualTo(0);
         assertThat(counter.computeScore(1, 2, 4, 5, 6)).isEqualTo(0);
         assertThat(counter.computeScore(1, 2, 3, 4, 4)).isEqualTo(0);
         assertThat(counter.computeScore(2, 3, 4, 4, 5)).isEqualTo(0);
-    }
-
-    @Override
-    protected YahtzeeEvaluator createYahtzeeEvaluator() {
-        return new LargeStraight();
     }
 }

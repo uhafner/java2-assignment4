@@ -258,27 +258,35 @@ class Main {
 }
 ----
 
-== Aufgabe 7 -- Interfaces in Tests
+== Aufgabe 7 -- DRY - Don't repeat yourself (optional)
+
+Die Schnittstelle `YahtzeeEvaluator` fordert eine Validierung eines jeden zu evaluierenden Yahtzee Wurfes. Diese Validierung lässt sich mit folgenden Varianten umsetzen:
+
+- in jeder Klasse kodieren (verstößt gegen das https://media.pragprog.com/titles/tpp20/dry.pdf[DRY Prinzip]: "Don't Repeat Yourself")
+- in einer statischen Methode kodieren (verstößt zwar auch gegen das DRY Prinzip, da ja auch der Methoden Aufruf dupliziert wird, allerdings ist das nicht ganz so tragisch und lässt sich erst nach Kennenlernen der Vererbung verbessern)
+
+Analysieren Sie Ihren Quellcode aus Aufgabe 6 und stellen Sie diesen -- falls nötig -- auf die zweite Variante um.
+
+== Aufgabe 8 -- Interfaces in Tests
 
 Wie in Aufgabe 6 beschrieben, braucht es zum Spielen von Yahtzee einen Würfelbecher mit 5 Würfeln. Dieser wird bis zu dreimal benutzt, um letztendlich die 5 Würfel für einen Spielzug zu ermitteln. Beispielsweise werden zunächst alle fünf Würfel gewürfelt: 1-5-4-4-1. Dann möchte der Spieler die beiden Vieren behalten und würfelt nur die 1, 5, und 1 nochmals mit dem Ergebnis: 4-6-4-4-2. Im Abschlusswurf werden die 6 und 2 nochmals gewürfelt, um beispielsweise dann das Endergebnis 4-1-4-4-4 zu werten.
 
-Die Implementierung für unseren Würfelbecher ist bereits in der Klasse `DiceCup` vorgegeben. Damit der Würfelbecher funktioniert, benötigt er 5 Würfel. Diese Würfel werden aktuell beim Erzeugen in der Klasse angelegt und sind durch die Schnittstelle `Dice` definiert.
+Die Implementierung für unseren Würfelbecher ist bereits in der Klasse `DiceCup` vorgegeben. Damit der Würfelbecher funktioniert, benötigt er 5 Würfel. Diese Würfel werden aktuell beim Erzeugen in der Klasse angelegt und sind durch die Schnittstelle `Die` definiert.
 
 [source,java]
 ----
 /**
- * A die has six faces and can be rolled.
- *
- * @author Ullrich Hafner
+ * A die is a six-sided cube. A die can be rolled and has a number on each side (face),
+ * and is part of many betting games and board games.
  */
 public interface Die {
     /**
-     * Rolls the die.
+     * Rolls this die.
      */
     void roll();
 
     /**
-     * Returns the face on top of the die.
+     * Returns the face on top of this die.
      *
      * @return the visible face (in the range [1, ..., 6])
      */
@@ -331,7 +339,7 @@ class DiceCup {
     roll(unchangedPositions: Integer[])
 }
 
-Die <|... RandomDice
+Die <|... RandomDie
 DiceCup o- "5" Die :\t\t
 
 @enduml
@@ -339,9 +347,9 @@ DiceCup o- "5" Die :\t\t
 
 Der Würfelbecher bietet einerseits Methoden an, um die aktuellen Augen aller Würfel (bzw. der ausgewählten Würfelpositionen) zurückzuliefern. Zum anderen können die Würfel neu gewürfelt werden: hier kann angegeben werden, welche Würfel unverändert bleiben sollen.
 
-Die Tests für die Klasse `DiceCup` fehlen noch und sind von Ihnen beizusteuern. Schreiben Sie so viele Tests, dass Sie eine ausreichende Testüberdeckung für alle Methoden der Klasse `DiceCup` erhalten. Schauen Sie dazu immer in die Methoden der Klasse `DiceCup`, um alle Fälle zu berücksichtigen. Es werden z.B. an einigen Stellen eine `IllegalArgumentException` geworfen.
+Die Tests für die Klasse `DiceCup` fehlen noch und sind von Ihnen beizusteuern. Schreiben Sie so viele Tests, dass Sie eine ausreichende Testüberdeckung für alle Methoden der Klasse `DiceCup` erhalten. Schauen Sie dazu immer in die Methoden der Klasse `DiceCup`, um alle Fälle zu berücksichtigen. Es wird z.B. an einigen Stellen eine `IllegalArgumentException` geworfen.
 
-Achtung: Mit den bestehen Klassen lassen sich reproduzierbare Tests schlecht schreiben, da die Würfel ja zufällige Werte haben. Daher muss die Implementierung des Würfels (`RandomDie`) für die Tests ausgetauscht werden, z.B. durch eine Klasse `ConfigurableDie`, die es ermöglicht die Würfelwerte vorzugeben (z.B. über ein Array). Diese Klasse muss auch die Schnittstelle `Die` implementieren. Diese Würfel können Sie dann jeweils passend im Test erzeugen und der Klasse `DiceCup` im Konstruktor übergeben. Damit ergibt sich folgende neue Klassenstruktur:
+Achtung: Mit den bestehen Klassen lassen sich reproduzierbare Tests schlecht schreiben, da die Würfel ja zufällige Werte haben. Daher muss die Implementierung des Würfels (`RandomDie`) für die Tests ausgetauscht werden, z.B. durch eine Klasse `FixedSeriesDie`, die es ermöglicht die Würfelwerte vorzugeben (z.B. über ein Array). Diese Klasse muss auch die Schnittstelle `Die` implementieren. Diese Würfel können Sie dann jeweils passend im Test erzeugen und der Klasse `DiceCup` im Konstruktor übergeben. Damit ergibt sich folgende neue Klassenstruktur:
 
 [plantuml]
 ----
@@ -379,7 +387,7 @@ class RandomDie {
     getFace(): Integer
 }
 
-class ConfigurableDie {
+class FixedSeriesDie {
     roll()
     getFace(): Integer
 }
@@ -391,7 +399,7 @@ class DiceCup {
 }
 
 Die <|... RandomDie
-Die <|... ConfigurableDie
+Die <|... FixedSeriesDie
 DiceCup o- "5" Die :\t\t
 
 @enduml

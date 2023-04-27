@@ -1,8 +1,6 @@
 package edu.hm.hafner.java2.assignment3;
 
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -11,7 +9,7 @@ import org.apache.commons.lang3.ArrayUtils;
  *
  * @author Ullrich Hafner
  */
-public class DiceCup implements Iterable<Die> {
+public class DiceCup {
     private final Die[] dice;
 
     /**
@@ -106,34 +104,5 @@ public class DiceCup implements Iterable<Die> {
     @Override
     public String toString() {
         return Arrays.toString(getFaces());
-    }
-
-    @Override
-    public Iterator<Die> iterator() {
-        return new DiceCupIterator(dice);
-    }
-
-    private static class DiceCupIterator implements Iterator<Die> {
-        private final Die[] dice;
-        private int index;
-
-        DiceCupIterator(final Die... dice) {
-            this.dice = Arrays.copyOf(dice, dice.length);
-            index = 0;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return index < dice.length;
-        }
-
-        @Override
-        public Die next() {
-            if (index < dice.length) {
-                return dice[index++];
-            }
-            throw new NoSuchElementException(
-                    String.format("Index %d is out of valid range [0, %d]", index, dice.length));
-        }
     }
 }
