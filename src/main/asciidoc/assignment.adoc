@@ -27,7 +27,7 @@ endif::[]
 [TIP]
 ====
 
-Die Abgabe dieses Übungsblattes ist möglich bis zum 27.4. 18:00. Laden Sie Ihre Lösung im GitHub Classroom https://classroom.github.com/a/ztT5nA-b[Assignment 3] auf den eigenen `main` Branch hoch. Auch in diesem Aufgabenblatt sind wieder mehr Aufgaben enthalten, als im normalen 2 Wochenpensum eingeplant sind, diese sind als *optional* markiert.
+Die Abgabe dieses Übungsblattes ist möglich bis zum 11.5. 18:00. Laden Sie Ihre Lösung im GitHub Classroom https://classroom.github.com/a/MpAunNXH[Assignment 3] auf den eigenen `main` Branch hoch. Auch in diesem Aufgabenblatt sind wieder mehr Aufgaben enthalten, als im normalen 2 Wochenpensum eingeplant sind, diese sind als *optional* markiert.
 
 ====
 
