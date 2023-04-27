@@ -86,11 +86,12 @@ skinparam ArrowThickness 2
 
 hide circle
 
-hide YahtzeeEvaluator fields
 
 interface YahtzeeEvaluator <<interface>>  {
     {abstract} computeScore(faces: int[]): Integer
 }
+
+hide YahtzeeEvaluator fields
 
 class FaceCounter {
     computeScore(faces: int[]): Integer
@@ -311,12 +312,12 @@ skinparam ArrowThickness 2
 
 hide circle
 
-hide Die fields
-
 interface Die <<interface>>  {
     {abstract} roll()
     {abstract} getFace(): Integer
 }
+
+hide Die fields
 
 class RandomDie {
     -face
@@ -365,12 +366,12 @@ skinparam ArrowThickness 2
 
 hide circle
 
-hide Die fields
-
 interface Die <<interface>>  {
     {abstract} roll()
     {abstract} getFace(): Integer
 }
+
+hide Die fields
 
 class RandomDie {
     -face
