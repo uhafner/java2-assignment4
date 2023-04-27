@@ -1,0 +1,399 @@
+= Übungsblatt 3 - Softwareentwicklung 2
+:icons: font
+Prof. Dr. Ullrich Hafner <ullrich.hafner@hm.edu>
+:toc-title: Inhaltsverzeichnis
+:chapter-label:
+:chapter-refsig: Kapitel
+:section-label: Abschnitt
+:section-refsig: Abschnitt
+
+:xrefstyle: short
+:!sectnums:
+:partnums:
+ifndef::includedir[:includedir: ./]
+ifndef::imagesdir[:imagesdir: ./]
+ifndef::plantUMLDir[:plantUMLDir: .plantuml/]
+:figure-caption: Abbildung
+:table-caption: Tabelle
+
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+[TIP]
+====
+
+Die Abgabe dieses Übungsblattes ist möglich bis zum 27.4. 18:00. Laden Sie Ihre Lösung im GitHub Classroom https://classroom.github.com/a/ztT5nA-b[Assignment 3] auf den eigenen `main` Branch hoch. Auch in diesem Aufgabenblatt sind wieder mehr Aufgaben enthalten, als im normalen 2 Wochenpensum eingeplant sind, diese sind als *optional* markiert.
+
+====
+
+== Aufgabe 6 -- Interfaces und Exceptions
+
+Basis für diese Aufgabe ist das Würfelspiel Yahtzee, das 1956 von E. S. Lowe auf den Markt gebracht wurde. In Deutschland ist das Spiel auch unter Kniffel bekannt (seit 1972 von Schmidt Spiele vertrieben). Nähere Details dazu finden Sie z.B. in https://de.wikipedia.org/wiki/Kniffel[Wikipedia]. Kurz zusammengefasst geht es zunächst darum, dass ein Spieler in mehreren Würfelrunden mit 5 Würfeln verschiedene Bilder würfeln muss. Die möglichen Bilder sind z.B. möglichst viele „Sechsen“, eine große Straße (1-2-3-4-5) oder ein
+Drilling mit Fünfern.
+
+Schreiben Sie für die in den folgenden Abschnitten beschriebenen Bilder jeweils Klassen, die den Wert eines Würfelwurfes für das jeweils festgelegte Bild berechnen. Für jedes Bild ist dabei eine speziell zugeschnittene separate Klasse zuständig. Die Tests für jede dieser Klassen sind bereits vorgegeben. Damit die Klassen im Spiel generisch verwendet werden können, müssen diese die Schnittstelle `YahtzeeEvaluator` implementieren:
+
+[source,java]
+----
+/**
+ * Evaluates the dice faces of a roll. A roll contains 5 dice that will be evaluated
+ * by a given category, e.g., full house, street, etc.
+ */
+public interface YahtzeeEvaluator {
+    /**
+     * Computes the score of a Yahtzee roll.
+     *
+     * @param faces
+     *         the dice faces of the roll
+     *
+     * @return the score of the roll
+     * @throws java.lang.IllegalArgumentException
+     *         if the number of dice faces is not 5 or if one of these dice faces
+     *         is not in the interval [1, 6]
+     */
+    int computeScore(int... faces);
+}
+
+----
+
+Dadurch ergibt sich die folgende Klassenstruktur:
+
+[plantuml]
+----
+@startuml
+
+skinparam class {
+  BackgroundColor #4AD386
+  BorderColor #a0a0a0
+  BackgroundColor<<Main>> gold
+  BorderColor black
+  ArrowColor black
+  FontName  Arial Unicode MS
+  FontSize 20
+}
+
+skinparam classFontSize 24
+skinparam classAttributeIconSize 0
+skinparam defaultFontSize 20
+
+skinparam ArrowColor black
+skinparam ArrowThickness 2
+
+hide circle
+
+hide YahtzeeEvaluator fields
+
+interface YahtzeeEvaluator <<interface>>  {
+    {abstract} computeScore(faces: int[]): Integer
+}
+
+class FaceCounter {
+    computeScore(faces: int[]): Integer
+}
+
+class SmallStraight {
+    computeScore(faces: int[]): Integer
+}
+
+class LargeStraight {
+    computeScore(faces: int[]): Integer
+}
+
+class FullHouse {
+    computeScore(faces: int[]): Integer
+}
+
+class SeveralOfAKind {
+    computeScore(faces: int[]): Integer
+}
+
+class Yahtzee {
+    computeScore(faces: int[]): Integer
+}
+
+class Chance {
+    computeScore(faces: int[]): Integer
+}
+
+YahtzeeEvaluator <|.. FaceCounter : \t
+YahtzeeEvaluator <|.up. SmallStraight : \t
+YahtzeeEvaluator <|.up. LargeStraight : \t
+YahtzeeEvaluator <|.left. FullHouse : \t
+YahtzeeEvaluator <|.. SeveralOfAKind : \t
+YahtzeeEvaluator <|.. Chance : \t
+YahtzeeEvaluator <|. Yahtzee : \t
+
+@enduml
+----
+
+Eingabe sind jeweils die 5 Würfelwerte in beliebiger Reihenfolge, z.B. 1-2-4-3-6. Ausgabe ist dann das Ergebnis in Punkten: hier 30 im Fall einer kleinen Straße (denn die 5 Würfel ergeben eine kleine Straße) bzw. 0 im Fall einer großen Straße (für die große Straße fehlt die 5). Die genaue Punkteverteilung finden Sie z.B. auch in https://de.wikipedia.org/wiki/Kniffel[Wikipedia].
+
+Wie in der Signatur des Interface zu sehen, müssen Sie die Parameter auch validieren: werden nicht genau 5 Würfel übergeben oder ist ein Würfel nicht im Bereich 1, ... , 6, dann muss eine `IllegalArgumentException` geworfen werden.
+
+Achten Sie bei der Implementierung darauf, dass Sie alle vorgegebenen Tests erfüllen.
+
+=== Aufgabe 6a: Nur Einser, Zweier, Dreier, Vierer, Fünfer oder Sechser
+
+Schreiben Sie die Klasse `FaceCounter`, die in einem Wurf die Augenzahlen aller Würfel zusammenzählt, die mit der festgelegten Augenzahl übereinstimmen. Legen Sie über den Konstruktor fest, ob die Klasse die Augenzahl 1, 2, 3, 4, 5 oder 6 zählen soll. Andere Werte sind nicht erlaubt und müssen als `IllegalArgumentException` geworfen werden.
+
+Beispiele:
+[source,java]
+----
+
+class Main {
+    public static void main(final String... args) {
+        FaceCounter ones = new FaceCounter(1);
+        System.out.println(ones.computeScore(1, 2, 3, 4, 5)); // Ergibt die Summe 1
+        System.out.println(ones.computeScore(1, 1, 1, 1, 1)); // Ergibt die Summe 5
+    }
+}
+----
+
+=== Aufgabe 6b: Kleine Straße
+
+Schreiben Sie die Klasse `SmallStraight`, die in einem Wurf eine kleine Straße erkennt. Eine kleine Straße zählt 30 Punkte und enthält 4 Würfel mit aufeinanderfolgenden Augenzahlen, z.B. die Folge 1-2-3-4. Die Augenzahl des verbleibenden Würfels ist jeweils egal. Ist keine kleine Straße vorhanden, wird der Wurf mit der Klasse `SmallStraight` zu 0 Punkten ausgewertet.
+
+Beispiele:
+[source,java]
+----
+
+class Main {
+    public static void main(final String... args) {
+        SmallStraight straight = new SmallStraight();
+        System.out.println(straight.computeScore(1, 2, 3, 5, 6)); // gibt 0 aus
+        System.out.println(straight.computeScore(1, 6, 2, 4, 3)); // gibt 30 aus
+    }
+}
+----
+
+=== Aufgabe 6c: Große Straße (optional)
+
+Schreiben Sie die Klasse `LargeStraight`, die in einem Wurf eine große Straße erkennt. Eine große Straße zählt 40 Punkte und enthält 5 Würfel mit aufeinanderfolgenden Augenzahlen, z.B. die Folge 1-2-3-4-5. Ist keine große Straße vorhanden, wird der Wurf mit der Klasse `LargeStraight` zu 0 Punkten ausgewertet.
+
+Beispiele:
+[source,java]
+----
+
+class Main {
+    public static void main(final String... args) {
+        LargeStraight straight = new LargeStraight();
+        System.out.println(straight.computeScore(1, 2, 3, 5, 6)); // gibt 0 aus
+        System.out.println(straight.computeScore(1, 5, 2, 4, 3)); // gibt 40 aus
+    }
+}
+----
+
+=== Aufgabe 6d: Full House
+
+Schreiben Sie die Klasse `FullHouse`, die in einem Wurf ein Full House erkennt. Ein Full House ist ein Wurf, der einen Drilling und ein Paar enthält. Dann zählt der Wurf 25 Punkte, egal welche Augen der Drilling bzw. das Paar haben. Die Augen des Drillings müssen sich in jedem Fall von den Augen des Paars unterscheiden.
+
+Beispiele:
+[source,java]
+----
+
+class Main {
+    public static void main(final String... args) {
+        FullHouse fullHouse = new FullHouse();
+        System.out.println(fullHouse.computeScore(6, 6, 6, 6, 6)); // gibt 0 aus
+        System.out.println(fullHouse.computeScore(6, 6, 6, 5, 5)); // gibt 25 aus
+    }
+}
+----
+
+=== Aufgabe 6e: Drilling oder Vierling
+
+Schreiben Sie die Klasse `SeveralOfAKind`, die in einem Wurf einen Drilling oder einen Vierling erkennt. Legen Sie dabei über den Konstruktor fest, wie oft der gleiche Würfelwert mindestens geworfen werden muss. D.h. der Wert 3 erkennt mindestens Drillinge, der Wert 4 erkennt mindestens Vierlinge, andere Werte sind nicht erlaubt und müssen als `IllegalArgumentException` geworfen werden. Sind im Wurf mindestens die festgelegte Anzahl an Würfeln enthalten, so werden die Augen aller 5 Würfel zusammengezählt, sonst ist das Ergebnis die 0.
+
+Beispiele:
+[source,java]
+----
+
+class Main {
+    public static void main(final String... args) {
+        SeveralOfAKind severalOfAKind = new SeveralOfAKind(3);
+        System.out.println(severalOfAKind.computeScore(6, 6, 6, 6, 6)); // gibt 30 aus
+        System.out.println(severalOfAKind.computeScore(6, 6, 6, 1, 1)); // gibt 20 aus
+        System.out.println(severalOfAKind.computeScore(6, 6, 5, 5, 2)); // gibt 0 aus
+    }
+}
+----
+
+=== Aufgabe 6f: Yahtzee  (optional)
+
+Schreiben Sie die Klasse Yahtzee, die in ein Yahtzee erkennt. Ein Yahtzee sind 5 Würfel mit der gleichen Augenzahl, es gibt dafür immer 50 Punkte, egal mit welchen Augen das erreicht wurde. Sonst ist das Ergebnis die 0.
+
+Beispiele:
+[source,java]
+----
+
+class Main {
+    public static void main(final String... args) {
+        Yahtzee yahtzee = new Yahtzee();
+        System.out.println(yahtzee.computeScore(6, 6, 6, 6, 6)); // gibt 50 aus
+        System.out.println(yahtzee.computeScore(6, 6, 6, 5, 6)); // gibt 0 aus
+    }
+}
+----
+
+=== Aufgabe 6g: Chance (optional)
+
+Schreiben Sie die Klasse `Chance`, die den Wert der Chance berechnet: dazu müssen einfach alle Würfelwerte addiert werden. Jeder Wurf kann als Chance genutzt werden.
+
+Beispiele:
+[source,java]
+----
+
+class Main {
+    public static void main(final String... args) {
+        Chance chance = new Chance();
+        System.out.println(chance.computeScore(1, 1, 1, 1, 1)); // gibt 5 aus
+        System.out.println(chance.computeScore(5, 4, 3, 2, 1)); // gibt 15 aus
+    }
+}
+----
+
+== Aufgabe 7 -- Interfaces in Tests
+
+Wie in Aufgabe 6 beschrieben, braucht es zum Spielen von Yahtzee einen Würfelbecher mit 5 Würfeln. Dieser wird bis zu dreimal benutzt, um letztendlich die 5 Würfel für einen Spielzug zu ermitteln. Beispielsweise werden zunächst alle fünf Würfel gewürfelt: 1-5-4-4-1. Dann möchte der Spieler die beiden Vieren behalten und würfelt nur die 1, 5, und 1 nochmals mit dem Ergebnis: 4-6-4-4-2. Im Abschlusswurf werden die 6 und 2 nochmals gewürfelt, um beispielsweise dann das Endergebnis 4-1-4-4-4 zu werten.
+
+Die Implementierung für unseren Würfelbecher ist bereits in der Klasse `DiceCup` vorgegeben. Damit der Würfelbecher funktioniert, benötigt er 5 Würfel. Diese Würfel werden aktuell beim Erzeugen in der Klasse angelegt und sind durch die Schnittstelle `Dice` definiert.
+
+[source,java]
+----
+/**
+ * A die has six faces and can be rolled.
+ *
+ * @author Ullrich Hafner
+ */
+public interface Die {
+    /**
+     * Rolls the die.
+     */
+    void roll();
+
+    /**
+     * Returns the face on top of the die.
+     *
+     * @return the visible face (in the range [1, ..., 6])
+     */
+    int getFace();
+}
+
+----
+
+Eine Implementierung für so einen Würfel existiert ebenso: ein `RandomDie` stellt so einen Würfel bereit, der zufällige Ergebnisse zeigt. Damit ergibt sich folgende Klassenstruktur:
+
+[plantuml]
+----
+@startuml
+
+skinparam class {
+  BackgroundColor #4AD386
+  BorderColor #a0a0a0
+  BackgroundColor<<Main>> gold
+  BorderColor black
+  ArrowColor black
+  FontName  Arial Unicode MS
+  FontSize 20
+}
+
+skinparam classFontSize 24
+skinparam classAttributeIconSize 0
+skinparam defaultFontSize 20
+
+skinparam ArrowColor black
+skinparam ArrowThickness 2
+
+hide circle
+
+hide Die fields
+
+interface Die <<interface>>  {
+    {abstract} roll()
+    {abstract} getFace(): Integer
+}
+
+class RandomDie {
+    -face
+    roll()
+    getFace(): Integer
+}
+
+class DiceCup {
+    getFaces(): Integer[]
+    getFaces(selectedPositions: Integer[]): Integer[]
+    roll(unchangedPositions: Integer[])
+}
+
+Die <|... RandomDice
+DiceCup o- "5" Die :\t\t
+
+@enduml
+----
+
+Der Würfelbecher bietet einerseits Methoden an, um die aktuellen Augen aller Würfel (bzw. der ausgewählten Würfelpositionen) zurückzuliefern. Zum anderen können die Würfel neu gewürfelt werden: hier kann angegeben werden, welche Würfel unverändert bleiben sollen.
+
+Die Tests für die Klasse `DiceCup` fehlen noch und sind von Ihnen beizusteuern. Schreiben Sie so viele Tests, dass Sie eine ausreichende Testüberdeckung für alle Methoden der Klasse `DiceCup` erhalten. Schauen Sie dazu immer in die Methoden der Klasse `DiceCup`, um alle Fälle zu berücksichtigen. Es werden z.B. an einigen Stellen eine `IllegalArgumentException` geworfen.
+
+Achtung: Mit den bestehen Klassen lassen sich reproduzierbare Tests schlecht schreiben, da die Würfel ja zufällige Werte haben. Daher muss die Implementierung des Würfels (`RandomDie`) für die Tests ausgetauscht werden, z.B. durch eine Klasse `ConfigurableDie`, die es ermöglicht die Würfelwerte vorzugeben (z.B. über ein Array). Diese Klasse muss auch die Schnittstelle `Die` implementieren. Diese Würfel können Sie dann jeweils passend im Test erzeugen und der Klasse `DiceCup` im Konstruktor übergeben. Damit ergibt sich folgende neue Klassenstruktur:
+
+[plantuml]
+----
+@startuml
+
+skinparam class {
+  BackgroundColor #4AD386
+  BorderColor #a0a0a0
+  BackgroundColor<<Main>> gold
+  BorderColor black
+  ArrowColor black
+  FontName  Arial Unicode MS
+  FontSize 20
+}
+
+skinparam classFontSize 24
+skinparam classAttributeIconSize 0
+skinparam defaultFontSize 20
+
+skinparam ArrowColor black
+skinparam ArrowThickness 2
+
+hide circle
+
+hide Die fields
+
+interface Die <<interface>>  {
+    {abstract} roll()
+    {abstract} getFace(): Integer
+}
+
+class RandomDie {
+    -face
+    roll()
+    getFace(): Integer
+}
+
+class ConfigurableDie {
+    roll()
+    getFace(): Integer
+}
+
+class DiceCup {
+    getFaces(): Integer[]
+    getFaces(selectedPositions: Integer[]): Integer[]
+    roll(unchangedPositions: Integer[])
+}
+
+Dice <|... RandomDie
+Dice <|... ConfigurableDie
+DiceCup o- "5" Dice :\t\t
+
+@enduml
+----
+
+
