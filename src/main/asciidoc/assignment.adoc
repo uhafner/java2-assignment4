@@ -390,9 +390,9 @@ class DiceCup {
     roll(unchangedPositions: Integer[])
 }
 
-Dice <|... RandomDie
-Dice <|... ConfigurableDie
-DiceCup o- "5" Dice :\t\t
+Die <|... RandomDie
+Die <|... ConfigurableDie
+DiceCup o- "5" Die :\t\t
 
 @enduml
 ----
