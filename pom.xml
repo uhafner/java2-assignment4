@@ -11,7 +11,7 @@
     <version>3.20.0</version>
   </parent>
 
-  <artifactId>java2-assignment3</artifactId>
+  <artifactId>java2-assignment4</artifactId>
   <version>2023-S-SNAPSHOT</version>
 
   <packaging>jar</packaging>

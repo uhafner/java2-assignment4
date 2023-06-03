@@ -1,4 +1,4 @@
-package edu.hm.hafner.java2.assignment3;
+package edu.hm.hafner.java2.assignment4;
 
 import java.util.Arrays;
 

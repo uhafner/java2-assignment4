@@ -1,4 +1,4 @@
-package edu.hm.hafner.java2.assignment3;
+package edu.hm.hafner.java2.assignment4;
 
 /**
  * A die is a six-sided cube. A die can be rolled and has a number on each side (face), and is part of many betting

@@ -1,4 +1,4 @@
-package edu.hm.hafner.java2.assignment3;
+package edu.hm.hafner.java2.assignment4;
 
 /**
  * Evaluates the dice faces of a roll. A roll contains 5 dice that will be evaluated by a given category,
