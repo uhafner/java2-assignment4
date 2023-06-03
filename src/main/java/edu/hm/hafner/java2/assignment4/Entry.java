@@ -37,7 +37,7 @@ public class Entry extends Row {
     @Override
     public String printScore() {
         if (isChosen()) {
-            return String.valueOf(score);
+            return super.printScore();
         }
         return EMPTY;
     }

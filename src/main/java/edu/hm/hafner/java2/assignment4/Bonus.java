@@ -34,9 +34,6 @@ public class Bonus extends Row {
 
     @Override
     public String printScore() {
-        if (getScore() == SCORE) {
-            return String.valueOf(SCORE);
-        }
-        return "0";
+        return String.valueOf(getScore());
     }
 }

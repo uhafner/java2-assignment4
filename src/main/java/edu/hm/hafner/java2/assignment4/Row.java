@@ -7,7 +7,7 @@ package edu.hm.hafner.java2.assignment4;
  */
 public abstract class Row {
     /** Represents a row entry that has not been set yet. */
-    public static final String EMPTY = "-";
+    public static final String EMPTY = " ";
 
     private final String displayName;
 
@@ -16,7 +16,7 @@ public abstract class Row {
     }
 
     /**
-     * Returns the whole text of this row.
+     * Returns a textual representation of this row.
      *
      * @return the text of this row
      */
@@ -37,7 +37,9 @@ public abstract class Row {
      *
      * @return the score for this row
      */
-    public abstract String printScore();
+    public String printScore() {
+        return String.valueOf(getScore());
+    }
 
     @Override
     public String toString() {

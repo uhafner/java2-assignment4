@@ -28,9 +28,4 @@ public class Sum extends Row {
     public int getScore() {
         return Arrays.stream(entries).mapToInt(Row::getScore).sum();
     }
-
-    @Override
-    public String printScore() {
-        return String.valueOf(getScore());
-    }
 }

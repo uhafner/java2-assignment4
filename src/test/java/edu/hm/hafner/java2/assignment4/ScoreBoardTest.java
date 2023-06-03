@@ -16,24 +16,24 @@ class ScoreBoardTest {
     void shouldPrintEmptyBoard() {
         ScoreBoard scoreBoard = createScoreBoard();
 
-        assertThat(scoreBoard.print()).isEqualToIgnoringNewLines("""
+        assertThat(scoreBoard.print()).isEqualToIgnoringWhitespace("""
                 0 Punkte nach 0 Runden
-                              Einser   -
-                              Zweier   -
-                              Dreier   -
-                              Vierer   -
-                              Fünfer   -
-                             Sechser   -
+                              Einser
+                              Zweier
+                              Dreier
+                              Vierer
+                              Fünfer
+                             Sechser
                           Summe oben   0
                                Bonus   0
                 Gesamter oberer Teil   0
-                            Drilling   -
-                            Vierling   -
-                          Full House   -
-                       Kleine Straße   -
-                        Große Straße   -
-                             Yahtzee   -
-                              Chance   -
+                            Drilling
+                            Vierling
+                          Full House
+                       Kleine Straße
+                        Große Straße
+                             Yahtzee
+                              Chance
                          Summe unten   0
                          Gesamtsumme   0
                 """);
@@ -47,24 +47,24 @@ class ScoreBoardTest {
         assertThat(scoreBoard.evaluateScore(Category.YAHTZEE, 1, 1, 1, 1, 1)).isEqualTo(50);
 
         scoreBoard.playRound(Category.YAHTZEE, 1, 1, 1, 1, 1);
-        assertThat(scoreBoard.print()).isEqualToIgnoringNewLines("""
+        assertThat(scoreBoard.print()).isEqualToIgnoringWhitespace("""
                 50 Punkte nach 1 Runden
-                              Einser   -
-                              Zweier   -
-                              Dreier   -
-                              Vierer   -
-                              Fünfer   -
-                             Sechser   -
+                              Einser
+                              Zweier
+                              Dreier
+                              Vierer
+                              Fünfer
+                             Sechser
                           Summe oben   0
                                Bonus   0
                 Gesamter oberer Teil   0
-                            Drilling   -
-                            Vierling   -
-                          Full House   -
-                       Kleine Straße   -
-                        Große Straße   -
+                            Drilling
+                            Vierling
+                          Full House
+                       Kleine Straße
+                        Große Straße
                              Yahtzee  50
-                              Chance   -
+                              Chance
                          Summe unten  50
                          Gesamtsumme  50
                 """);
