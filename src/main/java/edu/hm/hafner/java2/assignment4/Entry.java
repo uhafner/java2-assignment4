@@ -6,11 +6,6 @@ package edu.hm.hafner.java2.assignment4;
  * @author Ullrich Hafner
  */
 public class Entry extends Row {
-    private final YahtzeeEvaluator evaluator;
-
-    private int score;
-    private boolean chosen;
-
     /**
      * Creates a new entry for the score board.
      *
@@ -21,25 +16,15 @@ public class Entry extends Row {
      */
     public Entry(final String displayName, final YahtzeeEvaluator evaluator) {
         super(displayName);
-
-        this.evaluator = evaluator;
     }
 
     @Override
     public int getScore() {
-        return score;
-    }
-
-    @Override
-    public String printScore() {
-        if (isChosen()) {
-            return super.printScore();
-        }
-        return EMPTY;
+        return 0; // FIXME: implement entry score calculation
     }
 
     public boolean isChosen() {
-        return chosen;
+        return false; // FIXME: implement chosen state
     }
 
     /**
@@ -50,14 +35,10 @@ public class Entry extends Row {
      *         the faces to use
      *
      * @throws IllegalArgumentException
-     *         if the entry has been used already
+     *         if the entry has been chosen before
      */
     public void choose(final int... faces) {
-        if (chosen) {
-            throw new IllegalArgumentException("This entry is already chosen: " + this);
-        }
-        score = evaluator.computeScore(faces);
-        chosen = true;
+        // FIXME: implement entry choosing
     }
 
     /**
@@ -69,10 +50,6 @@ public class Entry extends Row {
      * @return the possible score
      */
     public int evaluateScore(final int... faces) {
-        if (chosen) {
-            throw new IllegalArgumentException("This entry is already chosen: " + this);
-        }
-
-        return evaluator.computeScore(faces);
+        return 0; // FIXME: implement entry choosing
     }
 }
