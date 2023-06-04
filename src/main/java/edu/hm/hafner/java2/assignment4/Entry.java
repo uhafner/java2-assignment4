@@ -1,7 +1,5 @@
 package edu.hm.hafner.java2.assignment4;
 
-import edu.hm.hafner.java2.assignment4.ScoreBoard.Category;
-
 /**
  * An entry in the score board that holds an instance of {@link YahtzeeEvaluator}.
  *
@@ -9,7 +7,6 @@ import edu.hm.hafner.java2.assignment4.ScoreBoard.Category;
  */
 public class Entry extends Row {
     private final YahtzeeEvaluator evaluator;
-    private final Category category;
 
     private int score;
     private boolean chosen;
@@ -17,16 +14,15 @@ public class Entry extends Row {
     /**
      * Creates a new entry for the score board.
      *
+     * @param displayName
+     *         the display name
      * @param evaluator
      *         the score evaluator
-     * @param category
-     *         the category
      */
-    public Entry(final YahtzeeEvaluator evaluator, final Category category) {
-        super(category.getDisplayName());
+    public Entry(final String displayName, final YahtzeeEvaluator evaluator) {
+        super(displayName);
 
         this.evaluator = evaluator;
-        this.category = category;
     }
 
     @Override

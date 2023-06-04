@@ -68,6 +68,29 @@ class ScoreBoardTest {
                          Summe unten  50
                          Gesamtsumme  50
                 """);
+
+        scoreBoard.playRound(Category.FIVES, 1, 5, 3, 5, 5);
+        assertThat(scoreBoard.print()).isEqualToIgnoringWhitespace("""
+                65 Punkte nach 2 Runden
+                              Einser
+                              Zweier
+                              Dreier
+                              Vierer
+                              Fünfer  15
+                             Sechser
+                          Summe oben  15
+                               Bonus   0
+                Gesamter oberer Teil  15
+                            Drilling
+                            Vierling
+                          Full House
+                       Kleine Straße
+                        Große Straße
+                             Yahtzee  50
+                              Chance
+                         Summe unten  50
+                         Gesamtsumme  65
+                """);
     }
 
     private ScoreBoard createScoreBoard() {

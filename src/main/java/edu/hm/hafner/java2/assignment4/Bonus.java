@@ -31,9 +31,4 @@ public class Bonus extends Row {
                 .mapToInt(Row::getScore)
                 .sum() > BONUS_LIMIT ? SCORE : 0;
     }
-
-    @Override
-    public String printScore() {
-        return String.valueOf(getScore());
-    }
 }

@@ -15,13 +15,8 @@ public abstract class Row {
         this.displayName = displayName;
     }
 
-    /**
-     * Returns a textual representation of this row.
-     *
-     * @return the text of this row
-     */
-    public final String getText() {
-        return String.format("%20s %3s", displayName, printScore());
+    public final String getDisplayName() {
+        return displayName;
     }
 
     /**
@@ -30,6 +25,15 @@ public abstract class Row {
      * @return the score for this row
      */
     public abstract int getScore();
+
+    /**
+     * Returns a textual representation of this row.
+     *
+     * @return the text of this row
+     */
+    public final String getText() {
+        return String.format("%20s %3s", getDisplayName(), printScore());
+    }
 
     /**
      * Returns the score for this row as a text. If the row has not been set already, then {@link #EMPTY} must be

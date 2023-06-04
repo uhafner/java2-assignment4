@@ -45,20 +45,24 @@ public class ScoreBoard {
     private void createSelectableEntries() {
         int index = 0;
 
-        entries[index++] = new Entry(new FaceCounter(1), Category.ONES);
-        entries[index++] = new Entry(new FaceCounter(2), Category.TWOS);
-        entries[index++] = new Entry(new FaceCounter(3), Category.THREES);
-        entries[index++] = new Entry(new FaceCounter(4), Category.FOURS);
-        entries[index++] = new Entry(new FaceCounter(5), Category.FIVES);
-        entries[index++] = new Entry(new FaceCounter(6), Category.SIXES);
+        entries[index++] = new Entry(Category.ONES.getDisplayName(), new FaceCounter(1));
+        entries[index++] = new Entry(Category.TWOS.getDisplayName(), new FaceCounter(2));
+        entries[index++] = new Entry(Category.THREES.getDisplayName(), new FaceCounter(3));
+        entries[index++] = new Entry(Category.FOURS.getDisplayName(), new FaceCounter(4));
+        entries[index++] = new Entry(Category.FIVES.getDisplayName(), new FaceCounter(5));
+        entries[index++] = new Entry(Category.SIXES.getDisplayName(), new FaceCounter(6));
 
-        entries[index++] = new Entry(new SeveralOfAKind(3), Category.THREE_OF_A_KIND);
-        entries[index++] = new Entry(new SeveralOfAKind(4), Category.FOUR_OF_A_KIND);
-        entries[index++] = new Entry(new FullHouse(), Category.FULL_HOUSE);
-        entries[index++] = new Entry(new SmallStraight(), Category.SMALL_STRAIGHT);
-        entries[index++] = new Entry(new LargeStraight(), Category.LARGE_STRAIGHT);
-        entries[index++] = new Entry(new Yahtzee(), Category.YAHTZEE);
-        entries[index++] = new Entry(new Chance(), Category.CHANCE);
+        entries[index++] = new Entry(Category.THREE_OF_A_KIND.getDisplayName(), new SeveralOfAKind(3)
+        );
+        entries[index++] = new Entry(Category.FOUR_OF_A_KIND.getDisplayName(), new SeveralOfAKind(4)
+        );
+        entries[index++] = new Entry(Category.FULL_HOUSE.getDisplayName(), new FullHouse());
+        entries[index++] = new Entry(Category.SMALL_STRAIGHT.getDisplayName(), new SmallStraight()
+        );
+        entries[index++] = new Entry(Category.LARGE_STRAIGHT.getDisplayName(), new LargeStraight()
+        );
+        entries[index++] = new Entry(Category.YAHTZEE.getDisplayName(), new Yahtzee());
+        entries[index++] = new Entry(Category.CHANCE.getDisplayName(), new Chance());
     }
 
     private void createPrintableEntries() {
@@ -135,6 +139,7 @@ public class ScoreBoard {
      *         the position to choose
      * @param faces
      *         the faces of the dice cup
+     * @return the score for the specified category and faces
      */
     public int evaluateScore(final Category category, final int... faces) {
         return entries[category.ordinal()].evaluateScore(faces);
