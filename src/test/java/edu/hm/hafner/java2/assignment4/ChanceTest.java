@@ -5,33 +5,34 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
 /**
- * Tests the class Chance.
+ * Tests the class {@link Chance}.
  *
  * @author Ullrich Hafner
  */
-class ChanceTest {
-    private YahtzeeEvaluator createYahtzeeEvaluator() {
-        return null; // FIXME: create new instance
-    }
-
+class ChanceTest extends AbstractYahtzeeTest {
     @Test
     void shouldSumFacesForMinimum() {
-        YahtzeeEvaluator counter = createYahtzeeEvaluator();
+        Chance counter = new Chance();
 
         assertThat(counter.computeScore(1, 1, 1, 1, 1)).isEqualTo(5);
     }
 
     @Test
     void shouldSumFacesForMaximum() {
-        YahtzeeEvaluator counter = createYahtzeeEvaluator();
+        Chance counter = new Chance();
 
         assertThat(counter.computeScore(6, 6, 6, 6, 6)).isEqualTo(30);
     }
 
     @Test
     void shouldSumFacesForMiddle() {
-        YahtzeeEvaluator counter = createYahtzeeEvaluator();
+        Chance counter = new Chance();
 
         assertThat(counter.computeScore(1, 2, 3, 4, 5)).isEqualTo(15);
+    }
+
+    @Override
+    protected YahtzeeEvaluator createYahtzeeEvaluator() {
+        return new Chance();
     }
 }

@@ -5,18 +5,14 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
 /**
- * Tests the class FaceCounter.
+ * Tests the class {@link FaceCounter}.
  *
  * @author Ullrich Hafner
  */
-class FaceCounterTest {
-    private YahtzeeEvaluator createYahtzeeEvaluator(final int i) {
-        return null; // FIXME: create new instance
-    }
-
+class FaceCounterTest extends AbstractYahtzeeTest {
     @Test
     void shouldCountOnlyOnes() {
-        YahtzeeEvaluator counter = createYahtzeeEvaluator(1);
+        FaceCounter counter = new FaceCounter(1);
 
         assertThat(counter.computeScore(5, 4, 3, 2, 1)).isEqualTo(1);
         assertThat(counter.computeScore(1, 4, 3, 2, 1)).isEqualTo(2);
@@ -27,7 +23,7 @@ class FaceCounterTest {
 
     @Test
     void shouldCountOnlyFives() {
-        YahtzeeEvaluator counter = createYahtzeeEvaluator(5);
+        FaceCounter counter = new FaceCounter(5);
 
         assertThat(counter.computeScore(5, 4, 3, 2, 1)).isEqualTo(5);
         assertThat(counter.computeScore(5, 5, 5, 5, 5)).isEqualTo(25);
@@ -39,11 +35,16 @@ class FaceCounterTest {
         assertThatIllegalArgumentException()
                 .as("Illegal face")
                 .isThrownBy(
-                        () -> createYahtzeeEvaluator(0)).withMessageContaining("0");
+                        () -> new FaceCounter(0)).withMessageContaining("0");
         assertThatIllegalArgumentException()
                 .as("Illegal face")
                 .isThrownBy(
-                        () -> createYahtzeeEvaluator(7)).withMessageContaining("7");
+                        () -> new FaceCounter(7)).withMessageContaining("7");
 
+    }
+
+    @Override
+    protected YahtzeeEvaluator createYahtzeeEvaluator() {
+        return new FaceCounter(1);
     }
 }

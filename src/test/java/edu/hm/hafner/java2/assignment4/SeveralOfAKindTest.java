@@ -5,18 +5,14 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
 /**
- * Tests the class SeveralOfAKind.
+ * Tests the class {@link SeveralOfAKind}.
  *
  * @author Ullrich Hafner
  */
-class SeveralOfAKindTest {
-    private YahtzeeEvaluator createYahtzeeEvaluator(final int i) {
-        return null; // FIXME: create new instance
-    }
-
+class SeveralOfAKindTest extends AbstractYahtzeeTest {
     @Test
     void shouldScoreThreeOfAKind() {
-        YahtzeeEvaluator counter = createYahtzeeEvaluator(3);
+        SeveralOfAKind counter = new SeveralOfAKind(3);
 
         assertThat(counter.computeScore(6, 6, 6, 6, 6)).isEqualTo(30);
         assertThat(counter.computeScore(1, 1, 1, 1, 1)).isEqualTo(5);
@@ -28,7 +24,7 @@ class SeveralOfAKindTest {
 
     @Test
     void shouldRejectThreeOfAKind() {
-        YahtzeeEvaluator counter = createYahtzeeEvaluator(3);
+        SeveralOfAKind counter = new SeveralOfAKind(3);
 
         assertThat(counter.computeScore(5, 5, 6, 4, 4)).isEqualTo(0);
         assertThat(counter.computeScore(1, 2, 3, 1, 2)).isEqualTo(0);
@@ -37,7 +33,7 @@ class SeveralOfAKindTest {
 
     @Test
     void shouldScoreFourOfAKind() {
-        YahtzeeEvaluator counter = createYahtzeeEvaluator(4);
+        SeveralOfAKind counter = new SeveralOfAKind(4);
 
         assertThat(counter.computeScore(6, 6, 6, 6, 6)).isEqualTo(30);
         assertThat(counter.computeScore(1, 1, 1, 1, 1)).isEqualTo(5);
@@ -51,7 +47,7 @@ class SeveralOfAKindTest {
      */
     @Test
     void shouldRejectFourOfAKind() {
-        YahtzeeEvaluator counter = createYahtzeeEvaluator(4);
+        SeveralOfAKind counter = new SeveralOfAKind(4);
 
         assertThat(counter.computeScore(5, 5, 5, 4, 4)).isEqualTo(0);
         assertThat(counter.computeScore(5, 4, 5, 4, 5)).isEqualTo(0);
@@ -64,10 +60,15 @@ class SeveralOfAKindTest {
         assertThatIllegalArgumentException()
                 .as("Illegal sequence length")
                 .isThrownBy(
-                        () -> createYahtzeeEvaluator(6)).withMessageContaining("6");
+                        () -> new SeveralOfAKind(6)).withMessageContaining("6");
         assertThatIllegalArgumentException()
                 .as("Illegal sequence length")
                 .isThrownBy(
-                        () -> createYahtzeeEvaluator(0)).withMessageContaining("0");
+                        () -> new SeveralOfAKind(0)).withMessageContaining("0");
+    }
+
+    @Override
+    protected YahtzeeEvaluator createYahtzeeEvaluator() {
+        return new SeveralOfAKind(4);
     }
 }

@@ -5,18 +5,14 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
 /**
- * Tests the class Yahtzee.
+ * Tests the class {@link Yahtzee}.
  *
  * @author Ullrich Hafner
  */
-class YahtzeeTest {
-    private YahtzeeEvaluator createYahtzeeEvaluator() {
-        return null; // FIXME: create new instance
-    }
-
+class YahtzeeTest extends AbstractYahtzeeTest {
     @Test
     void testsScoreForYahtzee() {
-        YahtzeeEvaluator counter = createYahtzeeEvaluator();
+        Yahtzee counter = new Yahtzee();
 
         assertThat(counter.computeScore(1, 1, 1, 1, 1)).isEqualTo(50);
         assertThat(counter.computeScore(5, 5, 5, 5, 5)).isEqualTo(50);
@@ -24,9 +20,14 @@ class YahtzeeTest {
 
     @Test
     void testsScoreForNoYahtzee() {
-        YahtzeeEvaluator counter = createYahtzeeEvaluator();
+        Yahtzee counter = new Yahtzee();
 
         assertThat(counter.computeScore(5, 5, 5, 5, 4)).isEqualTo(0);
         assertThat(counter.computeScore(1, 2, 3, 4, 5)).isEqualTo(0);
+    }
+
+    @Override
+    protected YahtzeeEvaluator createYahtzeeEvaluator() {
+        return new Yahtzee();
     }
 }
