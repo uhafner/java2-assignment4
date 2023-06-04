@@ -1,0 +1,121 @@
+= Übungsblatt 4 - Softwareentwicklung 2
+:icons: font
+Prof. Dr. Ullrich Hafner <ullrich.hafner@hm.edu>
+:toc-title: Inhaltsverzeichnis
+:chapter-label:
+:chapter-refsig: Kapitel
+:section-label: Abschnitt
+:section-refsig: Abschnitt
+
+:xrefstyle: short
+:!sectnums:
+:partnums:
+ifndef::includedir[:includedir: ./]
+ifndef::imagesdir[:imagesdir: ./]
+ifndef::plantUMLDir[:plantUMLDir: .plantuml/]
+:figure-caption: Abbildung
+:table-caption: Tabelle
+
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+[TIP]
+====
+
+Die Abgabe dieses Übungsblattes ist möglich bis zum 8.6. 18:00. Laden Sie Ihre
+Lösung im bestehenden GitHub Classroom https://classroom.github.com/a/MpAunNXH[Assignment 3] in einen neuen Branch `vererbung` hoch. Das Erzeugen eines neuen Branches zeige ich im Praktikum.
+
+====
+
+== Aufgabe 9 -- Vererbung mit abstrakten Klassen
+
+Wie bereits im Praktikum angesprochen, fordert die Schnittstelle `YahtzeeEvaluator` die Validierung eines Yahtzee Wurfes. Diese Validierung lässt sich mit folgenden Varianten umsetzen:
+
+- in jeder Klasse kodieren (verstößt gegen das DRY Prinzip: "Don’t Repeat Yourself")
+- in einer statischen Methode kodieren (verstößt gegen auch gegen das DRY Prinzip, da ja auch der Methoden Aufruf dupliziert wird)
+- in einer abstrakten Basisklasse
+
+=== Aufgabe 9.1 — Anpassen der `YahtzeeEvaluator` Klassen
+
+Schreiben Sie Ihre bestehenden Klassen so um, dass die Validierung die letzte Variante verwendet, d.h. in einer abstrakten Basisklasse `AbstractYahtzeeEvaluator` umgesetzt wird. Anschließend soll die normale Berechnung des Wertes aufgerufen werden. Damit dies funktioniert, müssen Sie z.B. eine neue abstrakte Methode `getScore` deklarieren, die die Berechnung des Würfelwurfes aus den abgeleiteten Klassen zurückliefert (ohne zu validieren). Diese Klasse `AbstractYahtzeeEvaluator` darf dann als einzige Klasse die Methode `computeScore` implementieren. Damit dies auch sichergestellt wird, muss diese Methode in der Klasse `AbstractYahtzeeEvaluator` als `final` markiert werden. Alle anderen `YahtzeeEvaluator` Implementierungen müssen von dieser neuen Basisklasse ableiten und die neue Methode `getScore` implementieren (die Implementierung haben Sie ja schon fast, nur die Validierung muss noch entfernt werden). Starten Sie nach der Umstrukturierung alle Tests. Diese sollten zunächst alle unverändert bleiben und erfolgreich durchlaufen. Dadurch ergibt sich die folgende neue Klassenstruktur:
+
+
+[plantuml]
+----
+@startuml
+
+skinparam class {
+  BackgroundColor #4AD386
+  BorderColor #a0a0a0
+  BackgroundColor<<Main>> gold
+  BorderColor black
+  ArrowColor black
+  FontName  Arial Unicode MS
+  FontSize 20
+}
+
+skinparam classFontSize 24
+skinparam classAttributeIconSize 0
+skinparam defaultFontSize 20
+
+skinparam ArrowColor black
+skinparam ArrowThickness 2
+
+hide circle
+
+
+interface YahtzeeEvaluator <<interface>>  {
+    {abstract} computeScore(faces: int[]): Integer
+}
+
+hide YahtzeeEvaluator fields
+
+abstract class AbstractYahtzeeEvaluator   {
+    +computeScore(faces: int[]): Integer
+    {abstract} #getScore(faces: int[]): Integer
+}
+
+class SmallStraight {
+    #getScore(faces: int[]): Integer
+}
+
+class LargeStraight {
+    #getScore(faces: int[]): Integer
+}
+
+class FullHouse {
+    #getScore(faces: int[]): Integer
+}
+
+class Yahtzee {
+    #getScore(faces: int[]): Integer
+}
+
+YahtzeeEvaluator <|.. AbstractYahtzeeEvaluator
+AbstractYahtzeeEvaluator <|-- SmallStraight : \t
+AbstractYahtzeeEvaluator <|-- LargeStraight : \t
+AbstractYahtzeeEvaluator <|-left. FullHouse : \t
+AbstractYahtzeeEvaluator <|- Yahtzee : \t
+
+@enduml
+----
+
+=== Aufgabe 9.2 — Anpassen der Test Klassen
+
+Analog zu den Klassen aus Aufgabe 9.1 sollten auch die vorgegebenen Tests so umstrukturiert werden, dass die Tests der Validierung (siehe `computeScore()` in Aufgabe 9.1) nur einmal kodiert werden. Diese Tests gibt es noch nicht, diese müssen Sie neu kodieren. Dazu müssen Sie analog zur Aufgabe 9.1. eine abstrakte Basisklasse `AbstractYahtzeeEvaluatorTest` einführen. In dieser Klasse können Sie dann die Tests zur Validierung kodieren. Prüfen Sie, dass die Methode `computeScore()` eine `IllegalArgumentException` wirft, wenn der Würfelwurf ungültig ist:
+
+- Es dürfen weder zu viele noch zu wenige Würfel enthalten sein, schreiben Sie dazu eine Testmethode `shouldFailIfNumberOfDiceIsInvalid`.
+- Es dürfen keine ungültigen Würfelwerte (0, 7, etc.) verwendet werden, schreiben Sie dazu eine Testmethode `shouldFailIfFaceValueIsInvalid`.
+
+Diese beiden Testmethoden haben in der abstrakten Testklasse noch kein Testobjekt, das überprüft
+werden kann. Dazu müssen Sie dieses Testobjekt über eine abstrakte Methode bereitstellen
+(`createYahtzeeEvaluator`). Diese Methode wird dann in den abgeleiteten Testklassen implementiert
+und liefert eine neue Instanz der zu testenden Klasse zurück. Die abgeleiteten Testklassen müssen
+dann nur diese Instanz bereitstellen und bekommen die Tests "geschenkt".
+Hinter diesem Vorgehen versteckt sich ein Pattern, das wir in Softwareengineering genauer
+anschauen werden. Sie können eine Beschreibung dazu in meinem https://github.com/uhafner/codingstyle/blob/main/doc/Abstract-Test-Pattern.md[Codingstyle] nachlesen.
