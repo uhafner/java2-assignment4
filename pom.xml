@@ -43,7 +43,7 @@
     <source.encoding>UTF-8</source.encoding>
     <project.build.sourceEncoding>${source.encoding}</project.build.sourceEncoding>
 
-    <module.name>${project.groupId}.java2.assignment2</module.name>
+    <module.name>${project.groupId}.java2.assignment4</module.name>
 
     <!-- Maven Plug-ins Configuration -->
     <asciidoctor.maven.plugin.version>2.2.4</asciidoctor.maven.plugin.version>
@@ -55,8 +55,6 @@
 
     <!-- Maven Surefire ArgLine -->
     <argLine>-Djava.util.logging.config.file=logging.properties</argLine>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
 
   </properties>
 
