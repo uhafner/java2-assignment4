@@ -7,7 +7,7 @@ package edu.hm.hafner.java2.assignment4;
  */
 public abstract class Row {
     /** Represents a row entry that has not been set yet. */
-    protected static final String EMPTY = " ";
+    public static final String EMPTY = " ";
 
     private final String displayName;
 
@@ -32,7 +32,7 @@ public abstract class Row {
      * @return the text of this row
      */
     public final String getText() {
-        return EMPTY; // FIXME: implement row text as a combination of display name and score
+        return String.format("%20s %3s", getDisplayName(), printScore());
     }
 
     /**
@@ -42,7 +42,7 @@ public abstract class Row {
      * @return the score for this row
      */
     public String printScore() {
-        return String.valueOf(getScore()); // FIXME: this default implementation is not applicable for all rows
+        return String.valueOf(getScore());
     }
 
     @Override
